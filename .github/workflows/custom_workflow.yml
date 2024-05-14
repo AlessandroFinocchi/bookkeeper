@@ -1,0 +1,24 @@
+name: custom_workflow.yml
+on: # The workflow runs the jobs when a push or a pull_req on the ale_branch happens
+  push:
+    branches: [ "ale_branch" ]
+  pull_request:
+    branches: [ "ale_branch" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # the jobs run on a VM with the latest version of ubuntu
+
+    steps:
+      - name: Clone repo          # clone of the repo onto the runner VM in order to have access to the code, @v3 is
+        uses: actions/checkout@v3 # the version of the action to use.
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B clean verify --file pom.xml
