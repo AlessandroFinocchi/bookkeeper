@@ -599,7 +599,7 @@
             <configuration>
               <threads>4</threads>
               <targetClasses>
-                <param>org.apache.bookkeeper.Cookie</param>
+                <param>org.apache.bookkeeper.bookie.Cookie</param>
               </targetClasses>
               <targetTests>
                 <param>org.apache.bookkeeper.custom_tests.CookieTest</param>

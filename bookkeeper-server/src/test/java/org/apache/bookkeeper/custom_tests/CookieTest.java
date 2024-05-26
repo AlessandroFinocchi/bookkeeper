@@ -1,5 +1,6 @@
 package org.apache.bookkeeper.custom_tests;
 
+import org.apache.bookkeeper.bookie.BookieException;
 import org.apache.bookkeeper.bookie.Cookie;
 import org.junit.After;
 import org.junit.Assert;
@@ -24,8 +25,10 @@ public class CookieTest {
     }
 
     @Test
-    public void myFirstTest(){
-        Assert.assertTrue(true);
+    public void encodeDirPathsTest(){
+        String[] dirs = {"dir1", "dir2"};
+        String result = Cookie.encodeDirPaths(dirs);
+        Assert.assertEquals(result, "2\tdir1\tdir2");
     }
 
     @After
