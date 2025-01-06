@@ -109,14 +109,14 @@ public class BufferedChannelUtils {
         return buffer;
     }
 
-    public static void main(String[] args){
-        try {
-            FileChannel f = readOnlyFileChannel();
-            ByteBuf b = fullByteBuf();
-            System.out.println("X");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        }
-    }
+//    public static void main(String[] args){
+//        try {
+//            FileChannel f = readOnlyFileChannel();
+//            ByteBuf b = fullByteBuf();
+//            System.out.println("X");
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//
+//        }
+//    }
 }
