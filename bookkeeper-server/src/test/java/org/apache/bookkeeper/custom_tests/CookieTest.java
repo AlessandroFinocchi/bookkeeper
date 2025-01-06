@@ -1,6 +1,5 @@
 package org.apache.bookkeeper.custom_tests;
 
-import org.apache.bookkeeper.bookie.BookieException;
 import org.apache.bookkeeper.bookie.Cookie;
 import org.junit.After;
 import org.junit.Assert;
