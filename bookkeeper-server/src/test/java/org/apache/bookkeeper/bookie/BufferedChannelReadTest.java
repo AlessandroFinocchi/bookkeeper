@@ -75,7 +75,7 @@ public class BufferedChannelReadTest {
     public void read(ByteBufAllocator allocator, FileChannel fc, int writeCapacity, int readCapacity,
                      long unpersistedBytesBound, ByteBuf dest, long pos, int length, int expectedReturn,
                      Class<Exception> expectedException) {
-        Assertions.assertTimeout(Duration.ofSeconds(5), () -> Thread.sleep(5000)); // To overcome infinite loops
+//        Assertions.assertTimeout(Duration.ofSeconds(5), () -> Thread.sleep(5000)); // To overcome infinite loops
         BufferedChannel bc;
         int destStartingWritePos = dest != null ? dest.writerIndex() : 0;
         if (expectedException != null && expectedReturn != -1) throw new RuntimeException("Invalid test configuration");

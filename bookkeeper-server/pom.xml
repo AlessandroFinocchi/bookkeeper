@@ -574,17 +574,17 @@
                 </configuration>
               </execution>
               <!-- Prettify Badua report -->
-              <execution>
-                <id>Prettify Badua Report</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>/bin/bash</executable>
-                  <arguments><argument>${basedir}/ba-dua-align.sh</argument></arguments>
-                </configuration>
-              </execution>
+<!--              <execution>-->
+<!--                <id>Prettify Badua Report</id>-->
+<!--                <phase>verify</phase>-->
+<!--                <goals>-->
+<!--                  <goal>exec</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <executable>/bin/bash</executable>-->
+<!--                  <arguments><argument>${basedir}/ba-dua-align.sh</argument></arguments>-->
+<!--                </configuration>-->
+<!--              </execution>-->
             </executions>
           </plugin>
         </plugins>
