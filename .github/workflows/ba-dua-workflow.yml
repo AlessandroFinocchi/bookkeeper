@@ -42,14 +42,14 @@ jobs:
           path: bookkeeper-server/target/badua.xml
           if-no-files-found: error
 
-      - name: Generate HTML report
-        if: always()
-        run: |
-          mkdir -p report
-          xsltproc -o report/index.html path/to/xslt bookkeeper-server/target/badua.xml
-
-      - name: Upload HTML report
-        uses: actions/upload-pages-artifact@v1
-        if: always()
-        with:
-          path: report
+#      - name: Generate HTML report
+#        if: always()
+#        run: |
+#          mkdir -p report
+#          xsltproc -o report/index.html path/to/xslt bookkeeper-server/target/badua.xml
+#
+#      - name: Upload HTML report
+#        uses: actions/upload-pages-artifact@v1
+#        if: always()
+#        with:
+#          path: report
