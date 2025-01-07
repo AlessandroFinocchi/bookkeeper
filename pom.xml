@@ -72,7 +72,6 @@
     <module>testtools</module>
 
     <module>bookkeeper-server</module>
-    <module>jacoco-module</module>
   </modules>
   <mailingLists>
     <mailingList>
