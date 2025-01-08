@@ -672,6 +672,8 @@
               </targetClasses>
               <targetTests>
                 <param>org.apache.bookkeeper.bookie.BufferedChannelConstructorTest</param>
+                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
+                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
               </targetTests>
             </configuration>
           </plugin>

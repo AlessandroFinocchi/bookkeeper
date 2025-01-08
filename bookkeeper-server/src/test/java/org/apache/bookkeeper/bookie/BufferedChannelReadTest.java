@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.stream.Stream;
 
 import static org.apache.bookkeeper.bookie.BufferedChannelUtils.*;
@@ -43,7 +42,7 @@ public class BufferedChannelReadTest {
 
                     // Varying dest
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       emptyByteBuf(),             0, BC_FC_STRING_TEST.length(), BC_FC_STRING_TEST.length(), null),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       semiFullByteBuf(),          0, BC_FC_STRING_TEST.length(), BC_FC_STRING_TEST.length(), null),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       semiFullByteBuf(),          0, BC_FC_STRING_TEST.length()/2, BC_FC_STRING_TEST.length()/2, null),
 //                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, fullByteBuf(),              0, BC_FC_STRING_TEST.length(), -1, Exception.class), // blocking
 //                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, invalidWriteIndexByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class)  // blocking
 //                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, invalidByteBuf(),           0, BC_FC_STRING_TEST.length(), -1, Exception.class), // blocking

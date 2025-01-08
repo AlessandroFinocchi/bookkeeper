@@ -103,7 +103,7 @@ public class BufferedChannelConstructorTest {
                 // ====================================== Added after Pitest ====================================== //
                 Assertions.assertEquals(unpersistedBytesBound > 0, bc.getDoRegularFlushes());
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

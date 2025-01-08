@@ -3,6 +3,7 @@ package org.apache.bookkeeper.bookie;
 import io.netty.buffer.*;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class BufferedChannelUtils {
     public static final String BC_TEST_FILE = "bc_test_file.txt";
     public static final String BC_FC_STRING_TEST = "Hello world!";
-    public static final String BC_BB_STRING_TEST = "Ciao mondoo?";
+    public static final String BC_BB_STRING_TEST = "Ciao mondo?!";
 
     public static ByteBufAllocator unpooledByteBufAllocator() {
         return UnpooledByteBufAllocator.DEFAULT;
@@ -78,8 +79,8 @@ public class BufferedChannelUtils {
         return Unpooled.buffer(BC_BB_STRING_TEST.length(), BC_BB_STRING_TEST.length());
     }
     public static ByteBuf semiFullByteBuf() {
-        ByteBuf buffer = Unpooled.buffer(BC_BB_STRING_TEST.length() * 2, BC_BB_STRING_TEST.length() * 2);
-        buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
+        ByteBuf buffer = Unpooled.buffer(BC_BB_STRING_TEST.length(), BC_BB_STRING_TEST.length() );
+        buffer.writeBytes(BC_BB_STRING_TEST.substring(0, BC_BB_STRING_TEST.length()/2).getBytes());
         return buffer;
     }
     public static ByteBuf fullByteBuf() {
@@ -87,6 +88,7 @@ public class BufferedChannelUtils {
         buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
         return buffer;
     }
+    /* For read testing */
     public static ByteBuf invalidWriteIndexByteBuf() {
         ByteBuf buffer = mock(ByteBuf.class);
         buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
@@ -94,7 +96,8 @@ public class BufferedChannelUtils {
         when(buffer.readerIndex()).thenReturn(BC_BB_STRING_TEST.length() + 1);
         return buffer;
     }
-    public static ByteBuf invalidByteBuf() {
+    /* For write testing */
+    public static ByteBuf invalidReadIndexByteBuf() {
         ByteBuf buffer = mock(ByteBuf.class);
         buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
         when(buffer.readableBytes()).thenReturn(BC_BB_STRING_TEST.length());
@@ -109,14 +112,28 @@ public class BufferedChannelUtils {
         return buffer;
     }
 
-//    public static void main(String[] args){
-//        try {
-//            FileChannel f = readOnlyFileChannel();
-//            ByteBuf b = fullByteBuf();
-//            System.out.println("X");
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
+    public static void main(String[] args){
+        try {
+//            ByteBuf writeBuffer = unpooledByteBufAllocator().directBuffer(12);
+//            ByteBuf src = fullByteBuf();
+//            writeBuffer.writeBytes(src, 0, 12);
 //
-//        }
-//    }
+//
+//            ByteBuffer toWrite = writeBuffer.internalNioBuffer(0, 12);
+//            FileChannel f = readOnlyFileChannel();
+//            f.position(0);
+//            int numBytesWritten = f.write(toWrite);
+
+
+
+            ByteBuf b1 = emptyByteBuf();
+            ByteBuf b2 = semiFullByteBuf();
+            ByteBuf b3 = fullByteBuf();
+            ByteBuf b4 = invalidWriteIndexByteBuf();
+            System.out.println("X");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
+        }
+    }
 }
