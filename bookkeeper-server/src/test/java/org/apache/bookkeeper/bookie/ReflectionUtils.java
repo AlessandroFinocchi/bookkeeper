@@ -6,7 +6,8 @@ public class ReflectionUtils {
     /**
      * Metodo per accedere a un campo privato di un oggetto usando Reflection.
      * Usage:
-     *  MyClass c = new MyClass(x = 5);
+     *  # MyClass has a private integer field named x, initialized in constructor
+     *  MyClass c = new MyClass(5);
      *  int a = getPrivateFieldValue(c, "x", Integer.class);
      *
      * @param targetObject L'oggetto che contiene il campo.

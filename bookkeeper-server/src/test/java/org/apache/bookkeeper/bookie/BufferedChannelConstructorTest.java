@@ -30,14 +30,14 @@ public class BufferedChannelConstructorTest {
             return Stream.of(
                     // Varying allocator
                     Arguments.of(unpooledByteBufAllocator(),    validFileChannel(), 100, 100, 0, null),
-//                    Arguments.of(invalidByteBufAllocator(),     validFileChannel(), 100, 100, 0, Exception.class),              // Not passed
+//                    Arguments.of(invalidByteBufAllocator(),     validFileChannel(), 100, 100, 0, Exception.class),              // T2 Not passed
                     Arguments.of(null,                          validFileChannel(), 100, 100, 0, Exception.class),
 
                     // Varying FileChannel
                     Arguments.of(unpooledByteBufAllocator(),    readOnlyFileChannel(),          100, 100, 0, null),
                     Arguments.of(unpooledByteBufAllocator(),    writeOnlyFileChannel(),         100, 100, 0, null),
                     Arguments.of(unpooledByteBufAllocator(),    closedFileChannel(),            100, 100, 0, Exception.class),
-//                    Arguments.of(unpooledByteBufAllocator(),    invalidPositionFileChannel(),   100, 100, 0, Exception.class),  // Not passed
+//                    Arguments.of(unpooledByteBufAllocator(),    invalidPositionFileChannel(),   100, 100, 0, Exception.class),  // T7 Not passed
                     Arguments.of(unpooledByteBufAllocator(),    null,                           100, 100, 0, Exception.class),
 
                     // Varying writeCapacity
@@ -51,12 +51,12 @@ public class BufferedChannelConstructorTest {
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100,       -1,     0, Exception.class),
 
                     // Varying unpersistedBytesBound
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      101,    Exception.class),       // Not passed
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      101,    Exception.class),       // T15 Not passed
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      100,    null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      99,     null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      50,     null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      1,      null)
-//                    ,Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,     -1,      Exception.class)        // Not passed
+//                    ,Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,     -1,      Exception.class)        // T20 Not passed
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
