@@ -29,12 +29,11 @@ public class BufferedChannelReadTest {
     private static Stream<Arguments> data() {
         try {
             return Stream.of(
-                    // Constructor failed tests T2 and T7, the others are not valid in write context
-//                    Arguments.of(invalidByteBufAllocator(),  validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class),                      // T2
+                    // Constructor failed tests T2 and T7, the others are not valid in read context
+//                    Arguments.of(invalidByteBufAllocator(),  validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class),                      // T2 not passed
                     Arguments.of(unpooledByteBufAllocator(), invalidPositionFileChannel(), 100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class),   // T7
 
                     // Varying valid FileChannel
-                    Arguments.of(unpooledByteBufAllocator(),    validFileChannel(),         100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(), BC_FC_STRING_TEST.length(), null),
                     Arguments.of(unpooledByteBufAllocator(),    writeOnlyFileChannel(),     100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class),
 
                     // Varying valid readCapacity
@@ -43,24 +42,23 @@ public class BufferedChannelReadTest {
                     // Varying dest
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       emptyByteBuf(),             0, BC_FC_STRING_TEST.length(), BC_FC_STRING_TEST.length(), null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       semiFullByteBuf(),          0, BC_FC_STRING_TEST.length()/2, BC_FC_STRING_TEST.length()/2, null),
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, fullByteBuf(),              0, BC_FC_STRING_TEST.length(), -1, Exception.class), // blocking
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, invalidWriteIndexByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class)  // blocking
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, invalidByteBuf(),           0, BC_FC_STRING_TEST.length(), -1, Exception.class), // blocking
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       fullByteBuf(),              0, BC_FC_STRING_TEST.length(), -1, Exception.class), // blocking
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       invalidWriteIndexByteBuf(), 0, BC_FC_STRING_TEST.length(), -1, Exception.class),  // blocking
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       deallocatedByteBuf(),       0, BC_FC_STRING_TEST.length(), -1, Exception.class),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0,       null,                       0, BC_FC_STRING_TEST.length(), -1, NullPointerException.class),
 
                     // Varying pos
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       -1,                             BC_FC_STRING_TEST.length(), -1, Exception.class),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       1,                              BC_FC_STRING_TEST.length()-1, BC_FC_STRING_TEST.length()-1, null),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       BC_FC_STRING_TEST.length(),     BC_FC_STRING_TEST.length(), -1, Exception.class),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       BC_FC_STRING_TEST.length()+1,   BC_FC_STRING_TEST.length(), -1, Exception.class),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       -1,                             BC_FC_STRING_TEST.length(),     -1, Exception.class),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       1,                              BC_FC_STRING_TEST.length(),     -1, Exception.class),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       BC_FC_STRING_TEST.length(),     BC_FC_STRING_TEST.length(),     -1, Exception.class),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(),       BC_FC_STRING_TEST.length()+1,   BC_FC_STRING_TEST.length(),     -1, Exception.class),
 
                     // Varying length
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, -1,                                -1,                             Exception.class),   // R13 not passed
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, 0,                                 0,                              null),
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, 1,                                 1,                              null),              // R15 Not passed
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length(),        BC_FC_STRING_TEST.length(),     null),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0, BC_FC_STRING_TEST.length() + 1,    -1,                             Exception.class)
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0,        0,                                  -1, Exception.class),   // R13 not passed
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0,        0,                                  0, null),
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 0,        0,                                  1, null),               // R15 Not passed
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 1,        BC_FC_STRING_TEST.length()-1,       BC_FC_STRING_TEST.length()-1, null),
+                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 0, emptyByteBuf(), 1,        BC_FC_STRING_TEST.length(),         -1, Exception.class)
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -72,9 +70,10 @@ public class BufferedChannelReadTest {
     public void read(ByteBufAllocator allocator, FileChannel fc, int writeCapacity, int readCapacity,
                      long unpersistedBytesBound, ByteBuf dest, long pos, int length, int expectedReturn,
                      Class<Exception> expectedException) {
+
+        if (expectedException != null && expectedReturn != -1) throw new RuntimeException("Invalid test configuration");
         BufferedChannel bc;
         int destStartingWritePos = dest != null ? dest.writerIndex() : 0;
-        if (expectedException != null && expectedReturn != -1) throw new RuntimeException("Invalid test configuration");
 
         try {
             bc = new BufferedChannel(allocator, fc, writeCapacity, readCapacity, unpersistedBytesBound);
@@ -84,9 +83,8 @@ public class BufferedChannelReadTest {
             // Assure that the BufferedChannel know the bytes to read
         } catch (Exception e) { throw new RuntimeException(e); }
 
-        if (expectedException != null) {
-            Assertions.assertThrows(expectedException, () -> bc.read(dest, pos, length));
-        } else {
+        if (expectedException != null) Assertions.assertThrows(expectedException, () -> bc.read(dest, pos, length));
+        else {
             try {
                 int actualReturn = bc.read(dest, pos, length);
                 Assertions.assertEquals(expectedReturn, actualReturn);
@@ -106,6 +104,7 @@ public class BufferedChannelReadTest {
             } catch (Exception e) { throw new RuntimeException(e); }
         }
     }
+
 
     @AfterEach
     public void deleteTestFile() throws IOException {

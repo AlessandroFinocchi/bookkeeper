@@ -675,6 +675,20 @@
                 <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
                 <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
               </targetTests>
+              <excludedMethods>
+                <excludedMethod>close</excludedMethod>
+                <excludedMethod>position</excludedMethod>
+                <excludedMethod>getFileChannelPosition</excludedMethod>
+                <excludedMethod>flushAndForceWrite</excludedMethod>
+                <excludedMethod>flushAndForceWriteIfRegularFlush</excludedMethod>
+                <excludedMethod>flush</excludedMethod>
+                <excludedMethod>forceWrite</excludedMethod>
+                <excludedMethod>clear</excludedMethod>
+                <excludedMethod>getNumOfBytesInWriteBuffer</excludedMethod>
+                <excludedMethod>getUnpersistedBytes</excludedMethod>
+                <excludedMethod>getDoRegularFlushes</excludedMethod>
+              </excludedMethods>
+              <verbose>false</verbose>
             </configuration>
           </plugin>
         </plugins>

@@ -46,3 +46,4 @@ build/
 .gradle/
 *.log
 *.dat
+/bookkeeper-server/bc_test_file.txt

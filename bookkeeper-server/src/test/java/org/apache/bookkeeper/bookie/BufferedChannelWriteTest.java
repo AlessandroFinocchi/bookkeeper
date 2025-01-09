@@ -37,7 +37,7 @@ public class BufferedChannelWriteTest {
 
                     // Varying fc
 //                    Arguments.of(unpooledByteBufAllocator(), readOnlyFileChannel(), 100, 100, 0,  fullByteBuf(), Exception.class),           // not passed
-                    Arguments.of(unpooledByteBufAllocator(),    readOnlyFileChannel(),  100, 100, 1,  fullByteBuf(), Exception.class),                  // passed
+                    Arguments.of(unpooledByteBufAllocator(),    readOnlyFileChannel(),  100, 100, 1,  fullByteBuf(), Exception.class),                  // EVO: passed
 
                     // Varying writeCapacity
 //                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(),       0,      100, 0, fullByteBuf(), Exception.class),      // blocking
@@ -48,7 +48,8 @@ public class BufferedChannelWriteTest {
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      emptyByteBuf(),                 null),              // passed
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      semiFullByteBuf(),              null),              // passed
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      invalidReadIndexByteBuf(),      Exception.class),   // passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      deallocatedByteBuf(),           Exception.class)    // passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      deallocatedByteBuf(),           Exception.class),   // passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 0,      null                ,           Exception.class)    // passed
 
 
             );
@@ -64,7 +65,6 @@ public class BufferedChannelWriteTest {
         BufferedChannel bc;
 
         try {
-//            fc.position(0);
             bc = new BufferedChannel(allocator, fc, writeCapacity, readCapacity, unpersistedBytesBound);
             Assertions.assertNotNull(bc);
         } catch (Exception e) { throw new RuntimeException(e); }
@@ -74,15 +74,13 @@ public class BufferedChannelWriteTest {
             try{
                 bc.write(src);
             }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            catch (Exception e) {  throw new RuntimeException(e); }
         }
     }
 
-//    @AfterEach
-//    public void deleteTestFile() throws IOException {
-//        Path path = Paths.get(BC_TEST_FILE);
-//        if (Files.exists(path)) Files.delete(path);
-//    }
+    @AfterEach
+    public void deleteTestFile() throws IOException {
+        Path path = Paths.get(BC_TEST_FILE);
+        if (Files.exists(path)) Files.delete(path);
+    }
 }
