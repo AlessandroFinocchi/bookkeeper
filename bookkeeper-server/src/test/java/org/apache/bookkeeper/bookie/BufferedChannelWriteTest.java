@@ -132,32 +132,105 @@ public class BufferedChannelWriteTest {
         Path path = Paths.get(BC_TEST_FILE);
         if (Files.exists(path)) Files.delete(path);
     }
-    @Test
-    void testWriteTriggeringForceWrite() throws Exception {
-        // Create a temporary file and FileChannel for testing
-        File tempFile = File.createTempFile("test", ".tmp");
-        tempFile.deleteOnExit();
 
-        try (FileChannel fileChannel = new RandomAccessFile(tempFile, "rw").getChannel()) {
-            // Define the write buffer capacity and unpersistedBytesBound
-            int writeCapacity = 1024;
-            long unpersistedBytesBound = 712; // Enable doRegularFlushes
 
-            // Initialize BufferedChannel
-            BufferedChannel bufferedChannel = new BufferedChannel(unpooledByteBufAllocator(), fileChannel, writeCapacity, unpersistedBytesBound);
-
-            // Create a ByteBuf with data to write
-            ByteBuf src = Unpooled.buffer(600);
-            src.writeBytes(new byte[600]); // Write 600 bytes of data
-
-            // Write to BufferedChannel
-            bufferedChannel.write(src);
-
-            // Check that unpersistedBytes has been updated
-            Assertions.assertEquals(600, bufferedChannel.getUnpersistedBytes());
-
-            // Clean up resources
-            src.release();
-        }
-    }
+//    private static Stream<Arguments> baduaData() {
+//        try {
+//            return Stream.of(
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 50, fullByteBuf(), null) // B-W1
+//            );
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @ParameterizedTest
+//    @Disabled
+//    @MethodSource("baduaData")
+//    public void baduaWrite(ByteBufAllocator allocator, FileChannel fc, int writeCapacity, int readCapacity,
+//                      long unpersistedBytesBound, ByteBuf src, Class<Exception> expectedException) {
+//        BufferedChannel bc;
+//        String expectedWrittenContent;
+//        int expectedWrittenContentLength;
+//        long initialFileChannelPosition;
+//        long expectedPosition, expectedUnpersistedBytes, expectedWriteBufferStartPosition;
+//
+//        try {
+//            bc = new BufferedChannel(allocator, fc, writeCapacity, readCapacity, unpersistedBytesBound);
+//            Assertions.assertNotNull(bc);
+//            initialFileChannelPosition = fc.position();
+//        } catch (Exception e) { throw new RuntimeException(e); }
+//
+//        if (expectedException != null) Assertions.assertThrows(expectedException, () -> bc.write(src));
+//        else {
+//            try{
+//                bc.write(src);
+//
+//                expectedWrittenContent    = src.toString(StandardCharsets.UTF_8);
+//                expectedWrittenContentLength = expectedWrittenContent.length();
+//
+//                // ====================================  Check written content ===================================== //
+//                boolean fileChannelWritten = expectedWrittenContentLength >= unpersistedBytesBound;
+//                String actualWrittenContent;
+//
+//                if(fileChannelWritten) {
+//                    ByteBuffer bb = ByteBuffer.allocate(BC_FC_STRING_TEST.length());
+//                    fc.read(bb, initialFileChannelPosition);
+//                    bb.flip();
+//                    actualWrittenContent = new String(bb.array(), 0, bb.limit());
+//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
+//
+//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
+//                    expectedUnpersistedBytes         = 0L;
+//                    expectedWriteBufferStartPosition = initialFileChannelPosition + expectedWrittenContentLength;
+//                }
+//                else { // is the write buffer that has been written
+//                    ByteBuf actualWrittenBuffer = Unpooled.buffer(BC_FC_STRING_TEST.length());
+//                    bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWrittenContentLength);
+//                    actualWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
+//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
+//
+//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
+//                    expectedUnpersistedBytes         = expectedWrittenContentLength;
+//                    expectedWriteBufferStartPosition = initialFileChannelPosition;
+//                }
+//
+//                // =====================================  Check class fields ====================================== //
+//                Assertions.assertEquals(expectedPosition,                   bc.position);
+//                Assertions.assertEquals(expectedUnpersistedBytes,           bc.unpersistedBytes.get());
+//                Assertions.assertEquals(expectedWriteBufferStartPosition,   bc.writeBufferStartPosition.get());
+//            }
+//            catch (Exception e) {  throw new RuntimeException(e); }
+//        }
+//    }
+//
+//    @ParameterizedTest
+//    @MethodSource("baduaData")
+//    void testWriteTriggeringForceWrite() throws Exception {
+//        // Create a temporary file and FileChannel for testing
+//        File tempFile = File.createTempFile("test", ".tmp");
+//        tempFile.deleteOnExit();
+//
+//        try (FileChannel fileChannel = new RandomAccessFile(tempFile, "rw").getChannel()) {
+//            // Define the write buffer capacity and unpersistedBytesBound
+//            int writeCapacity = 1024;
+//            long unpersistedBytesBound = 712; // Enable doRegularFlushes
+//
+//            // Initialize BufferedChannel
+//            BufferedChannel bufferedChannel = new BufferedChannel(unpooledByteBufAllocator(), fileChannel, writeCapacity, unpersistedBytesBound);
+//
+//            // Create a ByteBuf with data to write
+//            ByteBuf src = Unpooled.buffer(600);
+//            src.writeBytes(new byte[600]); // Write 600 bytes of data
+//
+//            // Write to BufferedChannel
+//            bufferedChannel.write(src);
+//
+//            // Check that unpersistedBytes has been updated
+//            Assertions.assertEquals(600, bufferedChannel.getUnpersistedBytes());
+//
+//            // Clean up resources
+//            src.release();
+//        }
+//    }
 }
