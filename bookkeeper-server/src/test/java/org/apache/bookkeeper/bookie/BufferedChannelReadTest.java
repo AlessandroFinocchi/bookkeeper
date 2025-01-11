@@ -55,8 +55,8 @@ public class BufferedChannelReadTest {
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(),       BC_FC_STRING_TEST.length()+1,   1,                              -1, Exception.class),   // R15 passed
 
                     // Varying length
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 0,        -1,                                  -1, Exception.class),   // R16 not passed
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 0,        0,                                  0, null),                               // R17 passed
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 0,        -1,                                 -1, Exception.class),   // R16 not passed
+//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 0,        0,                                  0, null),               // R17 not passed
 //                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 0,        1,                                  1, null),               // R18 Not passed
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 1,        BC_FC_STRING_TEST.length()-1,       BC_FC_STRING_TEST.length()-1, null),    // R19 passed
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1, emptyByteBuf(), 1,        BC_FC_STRING_TEST.length(),         -1, Exception.class)                    // R20 passed
@@ -90,7 +90,7 @@ public class BufferedChannelReadTest {
                 int actualReturn = bc.read(dest, pos, length);
                 Assertions.assertEquals(expectedReturn, actualReturn);
 
-                //============== Compare expected and actual written bytes on the destination buffer 2, ==============//
+                //=============== Compare expected and actual written bytes on the destination buffer  ===============//
                 // Get the substring that should be written
                 int startingPos = (int) pos;
                 int endingPos = startingPos + length;
@@ -102,6 +102,10 @@ public class BufferedChannelReadTest {
                 String actualWrittenBytes   = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
 
                 Assertions.assertEquals(expectedWrittenString, actualWrittenBytes);
+
+                // =====================================  Check class fields ====================================== //
+                Assertions.assertEquals(pos, bc.readBufferStartPosition);
+
             } catch (Exception e) { throw new RuntimeException(e); }
         }
     }

@@ -84,7 +84,7 @@ public class BufferedChannelWriteTest {
                 expectedWrittenContent    = src.toString(StandardCharsets.UTF_8);
                 expectedWrittenContentLength = expectedWrittenContent.length();
 
-                // ====================================  Check content written ===================================== //
+                // ====================================  Check written content ===================================== //
                 boolean fileChannelWritten = expectedWrittenContentLength >= unpersistedBytesBound;
                 String actualWrittenContent;
 
