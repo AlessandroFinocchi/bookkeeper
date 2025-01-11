@@ -141,7 +141,7 @@ public class BufferedChannelUtils {
             ByteBuf b2 = semiFullByteBuf();
             ByteBuf b3 = fullByteBuf();
             ByteBuf b4 = invalidReadIndexByteBuf();
-            System.out.println("X");
+            System.out.println(Long.MIN_VALUE);//-9223372036854775808
         } catch (Exception e) {
             throw new RuntimeException(e);
 

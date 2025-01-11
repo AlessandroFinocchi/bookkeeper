@@ -8,7 +8,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.apache.bookkeeper.bookie.BufferedChannelUtils.*;
+import static org.apache.bookkeeper.bookie.BufferedChannelUtils.fullByteBuf;
 
 /**
  * Unit testing for {@link BufferedChannel}. class <br>
@@ -53,7 +56,12 @@ public class BufferedChannelWriteTest {
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      fullByteBuf(),                  null),              // W13 passed
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      invalidReadIndexByteBuf(),      Exception.class),   // W14 passed
                     Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      deallocatedByteBuf(),           Exception.class),   // W15 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      null,                           Exception.class)    // W16 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      null,                           Exception.class),    // W16 passed
+
+                    // Added test after jacoco analysis
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()/2,    100, 0, fullByteBuf(), null)    // J-W1
+//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()/2+1,  100, 0, fullByteBuf(), null)            // J-W2
+
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -123,5 +131,33 @@ public class BufferedChannelWriteTest {
     public void deleteTestFile() throws IOException {
         Path path = Paths.get(BC_TEST_FILE);
         if (Files.exists(path)) Files.delete(path);
+    }
+    @Test
+    void testWriteTriggeringForceWrite() throws Exception {
+        // Create a temporary file and FileChannel for testing
+        File tempFile = File.createTempFile("test", ".tmp");
+        tempFile.deleteOnExit();
+
+        try (FileChannel fileChannel = new RandomAccessFile(tempFile, "rw").getChannel()) {
+            // Define the write buffer capacity and unpersistedBytesBound
+            int writeCapacity = 1024;
+            long unpersistedBytesBound = 712; // Enable doRegularFlushes
+
+            // Initialize BufferedChannel
+            BufferedChannel bufferedChannel = new BufferedChannel(unpooledByteBufAllocator(), fileChannel, writeCapacity, unpersistedBytesBound);
+
+            // Create a ByteBuf with data to write
+            ByteBuf src = Unpooled.buffer(600);
+            src.writeBytes(new byte[600]); // Write 600 bytes of data
+
+            // Write to BufferedChannel
+            bufferedChannel.write(src);
+
+            // Check that unpersistedBytes has been updated
+            Assertions.assertEquals(600, bufferedChannel.getUnpersistedBytes());
+
+            // Clean up resources
+            src.release();
+        }
     }
 }

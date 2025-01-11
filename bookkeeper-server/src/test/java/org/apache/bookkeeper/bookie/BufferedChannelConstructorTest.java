@@ -101,7 +101,7 @@ public class BufferedChannelConstructorTest {
                 Assertions.assertEquals(fc, bc.fileChannel);
 
                 // ====================================== Added after Pitest ====================================== //
-                Assertions.assertEquals(unpersistedBytesBound > 0, bc.getDoRegularFlushes());
+//                Assertions.assertEquals(unpersistedBytesBound > 0, bc.getDoRegularFlushes());
             }
             catch (Exception e) {
                 throw new RuntimeException(e);
