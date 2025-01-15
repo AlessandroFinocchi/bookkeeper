@@ -94,8 +94,6 @@ public class BufferedChannelReadTest {
             bc = new BufferedChannel(state.allocator, state.fc, state.writeCapacity, state.readCapacity, state.unpersistedBytesBound);
             Assertions.assertNotNull(bc);
             if(wbContent != null) bc.writeBuffer.writeBytes(wbContent.getBytes(StandardCharsets.UTF_8));
-
-            // Assure that the BufferedChannel know the bytes to read
         } catch (Exception e) { throw new RuntimeException(e); }
 
         if (expectedException != null) Assertions.assertThrows(expectedException, () -> bc.read(dest, pos, length));
@@ -128,13 +126,51 @@ public class BufferedChannelReadTest {
 
                 ByteBuf actualWrittenBuffer = Unpooled.buffer(actualLen);
                 dest.getBytes(destStartingWritePos, actualWrittenBuffer);
-                String actualWrittenBytes   = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
+                String actualWrittenString   = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
 
-                Assertions.assertEquals(expectedWrittenString, actualWrittenBytes);
+                Assertions.assertEquals(expectedWrittenString, actualWrittenString);
 
             } catch (Exception e) { throw new RuntimeException(e); }
         }
     }
+
+
+    private static Stream<Arguments> baduaData() {
+        try {
+            BufferedChannelState valid = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1);
+            return Stream.of(
+                    Arguments.of(valid, emptyByteBuf(), 0, BC_FC_CONTENT.length()/2, null)
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @ParameterizedTest
+    @MethodSource("baduaData")
+//    @Timeout(value = 5, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    public void baduaRead(BufferedChannelState state,ByteBuf dest, long pos,
+                     int length, Class<Exception> expectedException) {
+
+        BufferedChannel bc;
+        try {
+            bc = new BufferedChannel(state.allocator, state.fc, state.writeCapacity, state.readCapacity, state.unpersistedBytesBound);
+            bc.read(emptyByteBuf(), 1 ,3);
+            if (expectedException != null) Assertions.assertThrows(expectedException, () -> bc.read(dest, pos, length));
+
+            bc.read(dest, pos, length);
+
+            String expectedWrittenString = BC_FC_CONTENT.substring((int)pos, length);
+
+            ByteBuf actualWrittenBuffer = Unpooled.buffer(length);
+            dest.getBytes(0, actualWrittenBuffer);
+            String actualWrittenString   = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
+
+            Assertions.assertEquals(expectedWrittenString, actualWrittenString);
+
+        } catch (Exception e) { throw new RuntimeException(e); }
+    }
+
+
 
 
     @AfterEach
