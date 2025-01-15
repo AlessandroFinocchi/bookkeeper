@@ -3,7 +3,6 @@ package org.apache.bookkeeper.bookie;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -72,7 +71,10 @@ public class BufferedChannelReadTest {
                     Arguments.of(valid, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(),   null),  // R21 passed
                     // C4
                     Arguments.of(valid, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length()+1, Exception.class),   // R22 passed
-                    Arguments.of(valid, BC_BB_CONTENT, emptyByteBuf(),  BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), 1,   Exception.class)    // R23 passed
+                    Arguments.of(valid, BC_BB_CONTENT, emptyByteBuf(),  BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), 1,   Exception.class),    // R23 passed
+
+                    // Added after jacoco
+                    Arguments.of(t2Invalid, null, emptyByteBuf(),  BC_FC_CONTENT.length(), 1, null)   // R22 passed
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -103,26 +105,29 @@ public class BufferedChannelReadTest {
 
                 //=============== Compare expected and actual written bytes on the destination buffer  ===============//
                 boolean posInFileChannel = pos < bc.writeBufferStartPosition.get();
+                boolean writeBufferIsNull = bc.writeBuffer == null; // added after jacoco
                 String expectedWrittenString = "";
 
                 if(posInFileChannel) { // Read starting from file channel
                     // leggo prima dal file channel, poi se devo andare oltre leggo anche dal write buffer
                     int startingPos = (int) pos;
                     int readingFcBytesNum = Math.min(BC_FC_CONTENT.length() - (int)pos, length);
-                    int readingWbBytesNum = Math.max(length - BC_FC_CONTENT.length() + (int)pos, 0);
+                    int readingWbBytesNum = writeBufferIsNull ? 0 : Math.max(length - BC_FC_CONTENT.length() + (int)pos, 0);
                     expectedWrittenString =
                             BC_FC_CONTENT.substring(startingPos, startingPos + readingFcBytesNum) +
                                     BC_BB_CONTENT.substring(0, readingWbBytesNum);
                 }
-                else { // Read from writ buffer
+                else { // Read from write buffer
                     // leggo dal write buffer
-                    int startingPos = (int)pos - (int)bc.writeBufferStartPosition.get();
-                    expectedWrittenString = BC_BB_CONTENT.substring(startingPos, startingPos + length);
+                    int startingPos = writeBufferIsNull ? 0 : (int)pos - (int)bc.writeBufferStartPosition.get();
+                    int endingPos = writeBufferIsNull ? 0 : startingPos + length;
+                    expectedWrittenString = BC_BB_CONTENT.substring(startingPos, endingPos);
                 }
 
-                // Get the substring that was actually written
-                ByteBuf actualWrittenBuffer = Unpooled.buffer(length);
-                dest.getBytes(destStartingWritePos, actualWrittenBuffer, length);
+                int actualLen = !posInFileChannel && writeBufferIsNull ? 0 : length;
+
+                ByteBuf actualWrittenBuffer = Unpooled.buffer(actualLen);
+                dest.getBytes(destStartingWritePos, actualWrittenBuffer);
                 String actualWrittenBytes   = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
 
                 Assertions.assertEquals(expectedWrittenString, actualWrittenBytes);
