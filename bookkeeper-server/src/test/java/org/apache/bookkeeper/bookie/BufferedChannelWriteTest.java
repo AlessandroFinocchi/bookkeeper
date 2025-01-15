@@ -60,8 +60,8 @@ public class BufferedChannelWriteTest {
 //                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()/2+1, 100, 0, fullByteBuf(), null)       // J-W2
 
 //                    // Added test after pitest analysis
-//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()-2, 1, 1, fullByteBuf(), null)               // P-W1
-////                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()-2, 1, 3, fullByteBuf(), null)         // P-W1
+                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()-2, 1, 1, fullByteBuf(), null)                 // P-W1
+//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()-2, 1, 3, fullByteBuf(), null)           // P-W1
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -93,100 +93,100 @@ public class BufferedChannelWriteTest {
                 expectedWrittenContent    = src.toString(StandardCharsets.UTF_8);
                 expectedWrittenContentLength = expectedWrittenContent.length();
 
-                // ====================================  Check written content ===================================== //
-                boolean fileChannelWritten = expectedWrittenContentLength >= unpersistedBytesBound;
-                String actualWrittenContent;
-
-                if(fileChannelWritten) {
-                    ByteBuffer bb = ByteBuffer.allocate(BC_BB_CONTENT.length());
-                    fc.read(bb, initialFileChannelPosition);
-                    bb.flip();
-                    actualWrittenContent = new String(bb.array(), 0, bb.limit());
-                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
-
-                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
-                    expectedUnpersistedBytes         = 0L;
-                    expectedWriteBufferStartPosition = initialFileChannelPosition + expectedWrittenContentLength;
-                }
-                else { // is the write buffer that has been written
-                    ByteBuf actualWrittenBuffer = Unpooled.buffer(BC_FC_CONTENT.length());
-                    bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWrittenContentLength);
-                    actualWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
-                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
-
-                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
-                    expectedUnpersistedBytes         = expectedWrittenContentLength;
-                    expectedWriteBufferStartPosition = initialFileChannelPosition;
-                }
-
-                // =====================================  Check class fields ====================================== //
-                Assertions.assertEquals(expectedPosition,                   bc.position);
-                Assertions.assertEquals(expectedUnpersistedBytes,           bc.unpersistedBytes.get());
-                Assertions.assertEquals(expectedWriteBufferStartPosition,   bc.writeBufferStartPosition.get());
-
-//                // ====================================  Updates after pitest ===================================== //
-//                int expectedFcWrittenBytesLength;
-//                int expectedWbWrittenBytesLength;
-//                String expectedFcWrittenContent;
-//                String expectedWbWrittenContent;
-//                String actualFcWrittenContent;
-//                String actualWbWrittenContent;
+//                // ====================================  Check written content ===================================== //
+//                boolean fileChannelWritten = expectedWrittenContentLength >= unpersistedBytesBound;
+//                String actualWrittenContent;
 //
-//                if (unpersistedBytesBound < 1) { // CASE 1: everything is flushed into fc
-//                    expectedFcWrittenContent = expectedWrittenContent;
-//                    expectedWbWrittenContent = "";
+//                if(fileChannelWritten) {
+//                    ByteBuffer bb = ByteBuffer.allocate(BC_BB_CONTENT.length());
+//                    fc.read(bb, initialFileChannelPosition);
+//                    bb.flip();
+//                    actualWrittenContent = new String(bb.array(), 0, bb.limit());
+//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
+//
+//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
+//                    expectedUnpersistedBytes         = 0L;
+//                    expectedWriteBufferStartPosition = initialFileChannelPosition + expectedWrittenContentLength;
 //                }
-//                else if (expectedWrittenContentLength < writeCapacity){
-//                    if(expectedWrittenContentLength < unpersistedBytesBound) { // CASE 2:
-//                        expectedFcWrittenContent = "";
-//                        expectedWbWrittenContent = expectedWrittenContent;
-//                    }
-//                    else {
-//                        expectedFcWrittenContent = expectedWrittenContent;
-//                        expectedWbWrittenContent = "";
-//                    }
+//                else { // is the write buffer that has been written
+//                    ByteBuf actualWrittenBuffer = Unpooled.buffer(BC_FC_CONTENT.length());
+//                    bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWrittenContentLength);
+//                    actualWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
+//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
+//
+//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
+//                    expectedUnpersistedBytes         = expectedWrittenContentLength;
+//                    expectedWriteBufferStartPosition = initialFileChannelPosition;
 //                }
-//                else{
-//                    int lastBytesWrittenOnWbLength = expectedWrittenContentLength % writeCapacity;
-//                    int bytesWrittenOnFcLength = expectedWrittenContentLength - lastBytesWrittenOnWbLength;
-//                    if(lastBytesWrittenOnWbLength == 0){
-//                        expectedFcWrittenContent = expectedWrittenContent;
-//                        expectedWbWrittenContent = "";
-//                    }
-//                    else {
-//                        if(lastBytesWrittenOnWbLength > unpersistedBytesBound){
-//                            expectedFcWrittenContent = expectedWrittenContent;
-//                            expectedWbWrittenContent = "";
-//                        }
-//                        else{
-//                            expectedFcWrittenContent = expectedWrittenContent.substring(0, bytesWrittenOnFcLength);
-//                            expectedWbWrittenContent = expectedWrittenContent.substring(bytesWrittenOnFcLength, expectedWrittenContentLength);
-//                        }
-//                    }
-//                }
-//                expectedFcWrittenBytesLength = expectedFcWrittenContent.length();
-//                expectedWbWrittenBytesLength = expectedWbWrittenContent.length();
-//
-//                ByteBuffer bb = ByteBuffer.allocate(expectedWrittenContentLength);
-//                fc.read(bb, initialFileChannelPosition);
-//                bb.flip();
-//                actualFcWrittenContent = new String(bb.array(), 0, bb.limit());
-//
-//                ByteBuf actualWrittenBuffer = Unpooled.buffer(expectedWrittenContentLength);
-//                bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWbWrittenBytesLength);
-//                actualWbWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
-//
-//                Assertions.assertEquals(expectedFcWrittenContent, actualFcWrittenContent);
-//                Assertions.assertEquals(expectedWbWrittenContent, actualWbWrittenContent);
 //
 //                // =====================================  Check class fields ====================================== //
-//                expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
-//                expectedUnpersistedBytes         = expectedWbWrittenBytesLength;
-//                expectedWriteBufferStartPosition = initialFileChannelPosition + expectedFcWrittenBytesLength;
-//
 //                Assertions.assertEquals(expectedPosition,                   bc.position);
 //                Assertions.assertEquals(expectedUnpersistedBytes,           bc.unpersistedBytes.get());
 //                Assertions.assertEquals(expectedWriteBufferStartPosition,   bc.writeBufferStartPosition.get());
+
+                // ====================================  Updates after pitest ===================================== //
+                int expectedFcWrittenBytesLength;
+                int expectedWbWrittenBytesLength;
+                String expectedFcWrittenContent;
+                String expectedWbWrittenContent;
+                String actualFcWrittenContent;
+                String actualWbWrittenContent;
+
+                if (unpersistedBytesBound < 1) { // CASE 1: everything is flushed into fc
+                    expectedFcWrittenContent = expectedWrittenContent;
+                    expectedWbWrittenContent = "";
+                }
+                else if (expectedWrittenContentLength < writeCapacity){
+                    if(expectedWrittenContentLength < unpersistedBytesBound) { // CASE 2:
+                        expectedFcWrittenContent = "";
+                        expectedWbWrittenContent = expectedWrittenContent;
+                    }
+                    else {
+                        expectedFcWrittenContent = expectedWrittenContent;
+                        expectedWbWrittenContent = "";
+                    }
+                }
+                else{
+                    int lastBytesWrittenOnWbLength = expectedWrittenContentLength % writeCapacity;
+                    int bytesWrittenOnFcLength = expectedWrittenContentLength - lastBytesWrittenOnWbLength;
+                    if(lastBytesWrittenOnWbLength == 0){
+                        expectedFcWrittenContent = expectedWrittenContent;
+                        expectedWbWrittenContent = "";
+                    }
+                    else {
+                        if(lastBytesWrittenOnWbLength > unpersistedBytesBound){
+                            expectedFcWrittenContent = expectedWrittenContent;
+                            expectedWbWrittenContent = "";
+                        }
+                        else{
+                            expectedFcWrittenContent = expectedWrittenContent.substring(0, bytesWrittenOnFcLength);
+                            expectedWbWrittenContent = expectedWrittenContent.substring(bytesWrittenOnFcLength, expectedWrittenContentLength);
+                        }
+                    }
+                }
+                expectedFcWrittenBytesLength = expectedFcWrittenContent.length();
+                expectedWbWrittenBytesLength = expectedWbWrittenContent.length();
+
+                ByteBuffer bb = ByteBuffer.allocate(expectedWrittenContentLength);
+                fc.read(bb, initialFileChannelPosition);
+                bb.flip();
+                actualFcWrittenContent = new String(bb.array(), 0, bb.limit());
+
+                ByteBuf actualWrittenBuffer = Unpooled.buffer(expectedWrittenContentLength);
+                bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWbWrittenBytesLength);
+                actualWbWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
+
+                Assertions.assertEquals(expectedFcWrittenContent, actualFcWrittenContent);
+                Assertions.assertEquals(expectedWbWrittenContent, actualWbWrittenContent);
+
+                // =====================================  Check class fields ====================================== //
+                expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
+                expectedUnpersistedBytes         = expectedWbWrittenBytesLength;
+                expectedWriteBufferStartPosition = initialFileChannelPosition + expectedFcWrittenBytesLength;
+
+                Assertions.assertEquals(expectedPosition,                   bc.position);
+                Assertions.assertEquals(expectedUnpersistedBytes,           bc.unpersistedBytes.get());
+                Assertions.assertEquals(expectedWriteBufferStartPosition,   bc.writeBufferStartPosition.get());
             }
             catch (Exception e) {  throw new RuntimeException(e); }
         }
