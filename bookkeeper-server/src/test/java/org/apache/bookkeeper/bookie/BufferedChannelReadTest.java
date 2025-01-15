@@ -139,7 +139,8 @@ public class BufferedChannelReadTest {
         try {
             BufferedChannelState valid = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1);
             return Stream.of(
-                    Arguments.of(valid, emptyByteBuf(), 0, BC_FC_CONTENT.length()/2, null)
+                    Arguments.of(valid, emptyByteBuf(), 0, BC_FC_CONTENT.length()/2, null), // B-R1 passed
+                    Arguments.of(valid, emptyByteBuf(), 1, BC_FC_CONTENT.length()/2, null)  // B-R1 passed
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -159,7 +160,7 @@ public class BufferedChannelReadTest {
 
             bc.read(dest, pos, length);
 
-            String expectedWrittenString = BC_FC_CONTENT.substring((int)pos, length);
+            String expectedWrittenString = BC_FC_CONTENT.substring((int)pos, (int)pos+length);
 
             ByteBuf actualWrittenBuffer = Unpooled.buffer(length);
             dest.getBytes(0, actualWrittenBuffer);
