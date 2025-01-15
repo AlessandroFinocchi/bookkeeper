@@ -84,7 +84,7 @@ public class BufferedChannelUtils {
     }
 
     public static ByteBuf emptyByteBuf() {
-        return Unpooled.buffer(BC_BB_CONTENT.length(), BC_BB_CONTENT.length());
+        return Unpooled.buffer(BC_BB_CONTENT.length()+BC_FC_CONTENT.length(), BC_BB_CONTENT.length()+BC_FC_CONTENT.length());
     }
     public static ByteBuf semiFullByteBuf() {
         ByteBuf buffer = Unpooled.buffer(BC_BB_CONTENT.length(), BC_BB_CONTENT.length() );

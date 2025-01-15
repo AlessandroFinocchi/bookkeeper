@@ -137,11 +137,11 @@ public class BufferedChannelWriteTest {
                     expectedWbWrittenContent = "";
                 }
                 else if (expectedWrittenContentLength < writeCapacity){
-                    if(expectedWrittenContentLength < unpersistedBytesBound) { // CASE 2:
+                    if(expectedWrittenContentLength < unpersistedBytesBound) { // CASE 2: everything is in the buffer
                         expectedFcWrittenContent = "";
                         expectedWbWrittenContent = expectedWrittenContent;
                     }
-                    else {
+                    else {  // CASE 3: everything is flushed into file channel
                         expectedFcWrittenContent = expectedWrittenContent;
                         expectedWbWrittenContent = "";
                     }
@@ -149,16 +149,16 @@ public class BufferedChannelWriteTest {
                 else{
                     int lastBytesWrittenOnWbLength = expectedWrittenContentLength % writeCapacity;
                     int bytesWrittenOnFcLength = expectedWrittenContentLength - lastBytesWrittenOnWbLength;
-                    if(lastBytesWrittenOnWbLength == 0){
+                    if(lastBytesWrittenOnWbLength == 0){ // CASE 4: everything is flushed in file channel
                         expectedFcWrittenContent = expectedWrittenContent;
                         expectedWbWrittenContent = "";
                     }
                     else {
-                        if(lastBytesWrittenOnWbLength > unpersistedBytesBound){
+                        if(lastBytesWrittenOnWbLength > unpersistedBytesBound){ // CASE 5: everything is flushed in file channel
                             expectedFcWrittenContent = expectedWrittenContent;
                             expectedWbWrittenContent = "";
                         }
-                        else{
+                        else{ // CASE 6: last part is in the buffer, the remaining is flushed
                             expectedFcWrittenContent = expectedWrittenContent.substring(0, bytesWrittenOnFcLength);
                             expectedWbWrittenContent = expectedWrittenContent.substring(bytesWrittenOnFcLength, expectedWrittenContentLength);
                         }
