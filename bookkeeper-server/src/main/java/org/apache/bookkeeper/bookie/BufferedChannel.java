@@ -21,7 +21,6 @@
 
 package org.apache.bookkeeper.bookie;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
@@ -296,8 +295,4 @@ public class BufferedChannel extends BufferedReadChannel implements Closeable {
     long getUnpersistedBytes() {
         return unpersistedBytes.get();
     }
-
-    @VisibleForTesting()
-    boolean getDoRegularFlushes() {
-        return doRegularFlushes;
-    }}
+}

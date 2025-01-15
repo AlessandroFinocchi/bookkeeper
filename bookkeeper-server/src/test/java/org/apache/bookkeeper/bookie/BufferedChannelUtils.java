@@ -3,7 +3,6 @@ package org.apache.bookkeeper.bookie;
 import io.netty.buffer.*;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import static org.mockito.Mockito.*;
-// @SuppressWarnings("unused")
+
 public class BufferedChannelUtils {
     /**
      * FileChannel file name
@@ -20,11 +19,11 @@ public class BufferedChannelUtils {
     /**
      * String written in ByteBuf instances
      */
-    public static final String BC_FC_STRING_TEST = "Hello world!";
+    public static final String BC_FC_CONTENT = "Hello world!";
     /**
      * String written in FileChannel files
      */
-    public static final String BC_BB_STRING_TEST = "Ciao mondo?!";
+    public static final String BC_BB_CONTENT = "Ciao mondo?!";
 
     public static ByteBufAllocator unpooledByteBufAllocator() {
         return UnpooledByteBufAllocator.DEFAULT;
@@ -47,10 +46,10 @@ public class BufferedChannelUtils {
         Path path = Paths.get(BC_TEST_FILE);
         if (Files.exists(path)) Files.delete(path);
         Files.createFile(path);
-        Files.write(path, BC_FC_STRING_TEST.getBytes());
+        Files.write(path, BC_FC_CONTENT.getBytes());
 
         FileChannel fc = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.WRITE);
-        fc.position(BC_FC_STRING_TEST.length());
+        fc.position(BC_FC_CONTENT.length());
         return fc;
     }
     public static FileChannel closedFileChannel() throws IOException {
@@ -62,20 +61,20 @@ public class BufferedChannelUtils {
         Path path = Paths.get(BC_TEST_FILE);
         if (Files.exists(path)) Files.delete(path);
         Files.createFile(path);
-        Files.write(path, BC_FC_STRING_TEST.getBytes());
+        Files.write(path, BC_FC_CONTENT.getBytes());
 
         FileChannel fc = FileChannel.open(path, StandardOpenOption.READ);
-        fc.position(BC_FC_STRING_TEST.length());
+        fc.position(BC_FC_CONTENT.length());
         return fc;
     }
     public static FileChannel writeOnlyFileChannel() throws IOException {
         Path path = Paths.get(BC_TEST_FILE);
         if (Files.exists(path)) Files.delete(path);
         Files.createFile(path);
-        Files.write(path, BC_FC_STRING_TEST.getBytes());
+        Files.write(path, BC_FC_CONTENT.getBytes());
 
         FileChannel fc = FileChannel.open(path, StandardOpenOption.WRITE);
-        fc.position(BC_FC_STRING_TEST.length());
+        fc.position(BC_FC_CONTENT.length());
         return fc;
     }
     public static FileChannel invalidPositionFileChannel() throws IOException {
@@ -85,22 +84,22 @@ public class BufferedChannelUtils {
     }
 
     public static ByteBuf emptyByteBuf() {
-        return Unpooled.buffer(BC_BB_STRING_TEST.length(), BC_BB_STRING_TEST.length());
+        return Unpooled.buffer(BC_BB_CONTENT.length(), BC_BB_CONTENT.length());
     }
     public static ByteBuf semiFullByteBuf() {
-        ByteBuf buffer = Unpooled.buffer(BC_BB_STRING_TEST.length(), BC_BB_STRING_TEST.length() );
-        buffer.writeBytes(BC_BB_STRING_TEST.substring(0, BC_BB_STRING_TEST.length()/2).getBytes());
+        ByteBuf buffer = Unpooled.buffer(BC_BB_CONTENT.length(), BC_BB_CONTENT.length() );
+        buffer.writeBytes(BC_BB_CONTENT.substring(0, BC_BB_CONTENT.length()/2).getBytes());
         return buffer;
     }
     public static ByteBuf fullByteBuf() {
-        ByteBuf buffer = Unpooled.buffer(BC_BB_STRING_TEST.length(), BC_BB_STRING_TEST.length());
-        buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
+        ByteBuf buffer = Unpooled.buffer(BC_BB_CONTENT.length(), BC_BB_CONTENT.length());
+        buffer.writeBytes(BC_BB_CONTENT.getBytes());
         return buffer;
     }
-    public static ByteBuf invalidWriteIndexByteBuf() {
+    @SuppressWarnings("unused") public static ByteBuf invalidWriteIndexByteBuf() {
         ByteBuf buffer = spy(fullByteBuf());
-        when(buffer.writerIndex()).thenReturn(BC_BB_STRING_TEST.length());
-        when(buffer.readerIndex()).thenReturn(BC_BB_STRING_TEST.length() + 1);
+        when(buffer.writerIndex()).thenReturn(BC_BB_CONTENT.length());
+        when(buffer.readerIndex()).thenReturn(BC_BB_CONTENT.length() + 1);
         return buffer;
     } /* For read testing */
     public static ByteBuf invalidReadIndexByteBuf() {
@@ -109,8 +108,8 @@ public class BufferedChannelUtils {
         return buffer;
     } /* For write testing */
     public static ByteBuf deallocatedByteBuf() {
-        ByteBuf buffer = Unpooled.buffer(BC_BB_STRING_TEST.length());
-        buffer.writeBytes(BC_BB_STRING_TEST.getBytes());
+        ByteBuf buffer = Unpooled.buffer(BC_BB_CONTENT.length());
+        buffer.writeBytes(BC_BB_CONTENT.getBytes());
         // buffer reference count starts from 1, release decrements it by 1 so deallocating the buffer
         buffer.release();
         return buffer;

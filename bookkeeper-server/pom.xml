@@ -675,6 +675,20 @@
                 <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
                 <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
               </targetTests>
+              <timeoutConstant>10000</timeoutConstant>
+<!--              <mutators>--> <!-- add here only if some mutators are wanted -->
+<!--                <mutator>CONSTRUCTOR_CALLS</mutator>-->
+<!--                <mutator>VOID_METHOD_CALLS</mutator>-->
+<!--                <mutator>RETURN_VALS</mutator>-->
+<!--                <mutator>NON_VOID_METHOD_CALLS</mutator>-->
+<!--                <mutator>CONDITIONALS_BOUNDARY</mutator>-->
+<!--              </mutators>-->
+              <avoidCallsTo>
+                <avoidCallsTo>java.util.logging</avoidCallsTo>
+                <avoidCallsTo>org.apache.log4j</avoidCallsTo>
+                <avoidCallsTo>org.slf4j</avoidCallsTo>
+                <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
+              </avoidCallsTo>
               <excludedMethods>
                 <excludedMethod>close</excludedMethod>
                 <excludedMethod>position</excludedMethod>

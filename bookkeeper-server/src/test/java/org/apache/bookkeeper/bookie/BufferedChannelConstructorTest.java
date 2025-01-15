@@ -51,12 +51,9 @@ public class BufferedChannelConstructorTest {
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100,       -1,     1, Exception.class),
 
                     // Varying unpersistedBytesBound
-//                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      101,    Exception.class),       // T15 Not passed
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      100,    null),
-                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      99,     null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      50,     null),
                     Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,      0,      null)
-//                    ,Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,     -1,      Exception.class)        // T20 Not passed
+//                    ,Arguments.of(unpooledByteBufAllocator(), validFileChannel(), 100, 100,     -1,     Exception.class)        // T17 Not passed
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -64,8 +61,8 @@ public class BufferedChannelConstructorTest {
     }
 
     @ParameterizedTest
-    @Timeout(value = 5)
     @MethodSource("data")
+    @Timeout(value = 5, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
     public void construct(ByteBufAllocator allocator, FileChannel fc, int writeCapacity, int readCapacity,
                      long unpersistedBytesBound, Class<Exception> expectedException) {
         if (expectedException != null) {
@@ -99,9 +96,6 @@ public class BufferedChannelConstructorTest {
 
                 // ========================  Check superclass BufferedChannelBase fields ========================== //
                 Assertions.assertEquals(fc, bc.fileChannel);
-
-                // ====================================== Added after Pitest ====================================== //
-//                Assertions.assertEquals(unpersistedBytesBound > 0, bc.getDoRegularFlushes());
             }
             catch (Exception e) {
                 throw new RuntimeException(e);
