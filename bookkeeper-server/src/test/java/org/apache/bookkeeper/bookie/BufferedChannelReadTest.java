@@ -81,7 +81,8 @@ public class BufferedChannelReadTest {
 
                     // Added after badua
                     Arguments.of(badua03, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null),   // B-R3 passed
-                    Arguments.of(badua04, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null)   // B-R3 passed
+                    Arguments.of(badua04, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null),   // B-R3 passed ?
+                    Arguments.of(t2Invalid, null, emptyByteBuf(),  0, BC_FC_CONTENT.length(), null)   // B-R4 passed ?
 
             );
         } catch (IOException e) {
