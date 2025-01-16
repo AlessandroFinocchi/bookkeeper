@@ -34,6 +34,8 @@ public class BufferedChannelReadTest {
             BufferedChannelState fcInvalid = new BufferedChannelState(unpooledByteBufAllocator(), writeOnlyFileChannel(), 100, 100, 1);
             BufferedChannelState rcInvalid = new BufferedChannelState(invalidByteBufAllocator(), validFileChannel(), 100, 0, 1);
 
+            BufferedChannelState badua03 = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), 6, 6, 1);
+
             return Stream.of(
                     // Constructor failed tests T2 and T7, the others are not valid in read context
 //                    Arguments.of(t2Invalid, null, emptyByteBuf(), 0, BC_FC_CONTENT.length(), Exception.class), // T2 -> R1 not passed
@@ -74,7 +76,11 @@ public class BufferedChannelReadTest {
                     Arguments.of(valid, BC_BB_CONTENT, emptyByteBuf(),  BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), 1,   Exception.class),    // R23 passed
 
                     // Added after jacoco
-                    Arguments.of(t2Invalid, null, emptyByteBuf(),  BC_FC_CONTENT.length(), 1, null)   // R22 passed
+                    Arguments.of(t2Invalid, null, emptyByteBuf(),  BC_FC_CONTENT.length(), 1, null),  // R24 passed
+
+                    // Added after badua
+                    Arguments.of(badua03, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null)   // B-R3 passed
+
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -139,8 +145,8 @@ public class BufferedChannelReadTest {
         try {
             BufferedChannelState valid = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), 100, 100, 1);
             return Stream.of(
-                    Arguments.of(valid, emptyByteBuf(), 0, BC_FC_CONTENT.length()/2, null), // B-R1 passed
-                    Arguments.of(valid, emptyByteBuf(), 1, BC_FC_CONTENT.length()/2, null)  // B-R1 passed
+                    Arguments.of(valid, emptyByteBuf(), 0, 6, null), // B-R1 passed
+                    Arguments.of(valid, emptyByteBuf(), 1, 6, null)  // B-R2 passed
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
