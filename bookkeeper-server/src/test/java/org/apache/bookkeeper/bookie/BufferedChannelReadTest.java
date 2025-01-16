@@ -34,7 +34,8 @@ public class BufferedChannelReadTest {
             BufferedChannelState fcInvalid = new BufferedChannelState(unpooledByteBufAllocator(), writeOnlyFileChannel(), 100, 100, 1);
             BufferedChannelState rcInvalid = new BufferedChannelState(invalidByteBufAllocator(), validFileChannel(), 100, 0, 1);
 
-            BufferedChannelState badua03 = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), 6, 6, 1);
+            BufferedChannelState badua03 = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), BC_FC_CONTENT.length()/2, BC_BB_CONTENT.length()/2, 1);
+            BufferedChannelState badua04 = new BufferedChannelState(unpooledByteBufAllocator(), validFileChannel(), BC_FC_CONTENT.length(), BC_BB_CONTENT.length(), 1);
 
             return Stream.of(
                     // Constructor failed tests T2 and T7, the others are not valid in read context
@@ -79,6 +80,7 @@ public class BufferedChannelReadTest {
                     Arguments.of(t2Invalid, null, emptyByteBuf(),  BC_FC_CONTENT.length(), 1, null),  // R24 passed
 
                     // Added after badua
+                    Arguments.of(badua03, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null),   // B-R3 passed
                     Arguments.of(badua03, BC_BB_CONTENT, emptyByteBuf(),  0, BC_FC_CONTENT.length()+BC_BB_CONTENT.length(), null)   // B-R3 passed
 
             );
