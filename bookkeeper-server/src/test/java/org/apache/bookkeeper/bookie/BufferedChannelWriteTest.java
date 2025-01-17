@@ -93,37 +93,6 @@ public class BufferedChannelWriteTest {
                 expectedWrittenContent    = src.toString(StandardCharsets.UTF_8);
                 expectedWrittenContentLength = expectedWrittenContent.length();
 
-//                // ====================================  Check written content ===================================== //
-//                boolean fileChannelWritten = expectedWrittenContentLength >= unpersistedBytesBound;
-//                String actualWrittenContent;
-//
-//                if(fileChannelWritten) {
-//                    ByteBuffer bb = ByteBuffer.allocate(BC_BB_CONTENT.length());
-//                    fc.read(bb, initialFileChannelPosition);
-//                    bb.flip();
-//                    actualWrittenContent = new String(bb.array(), 0, bb.limit());
-//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
-//
-//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
-//                    expectedUnpersistedBytes         = 0L;
-//                    expectedWriteBufferStartPosition = initialFileChannelPosition + expectedWrittenContentLength;
-//                }
-//                else { // is the write buffer that has been written
-//                    ByteBuf actualWrittenBuffer = Unpooled.buffer(BC_FC_CONTENT.length());
-//                    bc.writeBuffer.getBytes(0, actualWrittenBuffer, expectedWrittenContentLength);
-//                    actualWrittenContent = actualWrittenBuffer.toString(StandardCharsets.UTF_8);
-//                    Assertions.assertEquals(expectedWrittenContent, actualWrittenContent);
-//
-//                    expectedPosition                 = initialFileChannelPosition + expectedWrittenContentLength;
-//                    expectedUnpersistedBytes         = expectedWrittenContentLength;
-//                    expectedWriteBufferStartPosition = initialFileChannelPosition;
-//                }
-//
-//                // =====================================  Check class fields ====================================== //
-//                Assertions.assertEquals(expectedPosition,                   bc.position);
-//                Assertions.assertEquals(expectedUnpersistedBytes,           bc.unpersistedBytes.get());
-//                Assertions.assertEquals(expectedWriteBufferStartPosition,   bc.writeBufferStartPosition.get());
-
                 // ====================================  Updates after pitest ===================================== //
                 int expectedFcWrittenBytesLength;
                 int expectedWbWrittenBytesLength;
