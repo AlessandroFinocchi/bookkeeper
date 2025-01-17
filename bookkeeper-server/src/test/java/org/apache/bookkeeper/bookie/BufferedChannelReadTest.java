@@ -16,12 +16,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static org.apache.bookkeeper.bookie.BufferedChannelUtils.*;
-import static org.apache.bookkeeper.bookie.BufferedChannelUtils.BC_FC_CONTENT;
+import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.*;
+import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.BC_FC_CONTENT;
 
 /**
  * Unit testing for {@link BufferedChannel}. class <br>
- * Tested method: {@link BufferedChannel#read(ByteBuf, long, int)} 72 69 78
+ * Tested method: {@link BufferedChannel#read(ByteBuf, long, int)}
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BufferedChannelReadTest {

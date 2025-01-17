@@ -527,6 +527,7 @@
                 <configuration>
                   <includes>
                     <include>org/apache/bookkeeper/bookie/BufferedChannel.class</include>
+                    <include>org/apache/bookkeeper/bookie/storage/ldb/WriteCache.class</include>
                   </includes>
                 </configuration>
                 <goals>
@@ -668,12 +669,14 @@
             <configuration>
               <threads>4</threads>
               <targetClasses>
-                <param>org.apache.bookkeeper.bookie.BufferedChannel</param>
+<!--                <param>org.apache.bookkeeper.bookie.BufferedChannel</param>-->
+                <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCache</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.bookkeeper.bookie.BufferedChannelConstructorTest</param>
-                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
-                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
+<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelConstructorTest</param>-->
+<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>-->
+<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>-->
+                <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCacheConstructorTest</param>
               </targetTests>
               <timeoutConstant>10000</timeoutConstant>
 <!--              <mutators>--> <!-- add here only if some mutators are wanted -->
