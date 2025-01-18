@@ -1,7 +1,6 @@
 package org.apache.bookkeeper.bookie.storage.ldb;
 
 import io.netty.buffer.ByteBufAllocator;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Timeout;
@@ -9,14 +8,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.apache.bookkeeper.bookie.custom_utils.Utils.*;
-import static org.apache.bookkeeper.bookie.custom_utils.Utils.BC_TEST_FILE;
 
 /**
  * Unit testing for {@link WriteCache}. class <br>
@@ -84,11 +78,5 @@ public class WriteCacheConstructorTest {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    @AfterEach
-    public void deleteTestFile() throws IOException {
-        Path path = Paths.get(BC_TEST_FILE);
-        if (Files.exists(path)) Files.delete(path);
     }
 }
