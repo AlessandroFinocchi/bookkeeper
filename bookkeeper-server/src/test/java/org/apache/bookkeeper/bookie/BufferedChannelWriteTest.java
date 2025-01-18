@@ -17,8 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.*;
-import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.fullByteBuf;
+import static org.apache.bookkeeper.bookie.custom_utils.Utils.*;
+import static org.apache.bookkeeper.bookie.custom_utils.Utils.fullByteBuf;
 
 /**
  * Unit testing for {@link BufferedChannel}. class <br>

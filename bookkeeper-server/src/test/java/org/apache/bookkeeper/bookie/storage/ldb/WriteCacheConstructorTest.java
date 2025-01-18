@@ -15,8 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.*;
-import static org.apache.bookkeeper.bookie.custom_utils.BufferedChannelUtils.BC_TEST_FILE;
+import static org.apache.bookkeeper.bookie.custom_utils.Utils.*;
+import static org.apache.bookkeeper.bookie.custom_utils.Utils.BC_TEST_FILE;
 
 /**
  * Unit testing for {@link WriteCache}. class <br>

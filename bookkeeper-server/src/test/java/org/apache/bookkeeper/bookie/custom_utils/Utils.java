@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 
 import static org.mockito.Mockito.*;
 
-public class BufferedChannelUtils {
+public class Utils {
     /**
      * FileChannel file name
      */
