@@ -677,6 +677,7 @@
 <!--                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>-->
 <!--                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>-->
                 <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCacheConstructorTest</param>
+                <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCachePutTest</param>
               </targetTests>
               <timeoutConstant>10000</timeoutConstant>
 <!--              <mutators>--> <!-- add here only if some mutators are wanted -->
