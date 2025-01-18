@@ -31,13 +31,13 @@ public class WriteCacheConstructorTest {
                 Arguments.of(unpooledByteBufAllocator(),  1, 1, null),                  // T5 passed
 
                 // Varying maxSegmentSize
-                Arguments.of(unpooledByteBufAllocator(), 10, -1, Exception.class),      // T6  passed
-                Arguments.of(unpooledByteBufAllocator(), 10,  0, Exception.class),      // T7  passed
-                Arguments.of(unpooledByteBufAllocator(), 10,  1, null),                 // T8  passed
-                Arguments.of(unpooledByteBufAllocator(), 10,  6, Exception.class),      // T9  passed
-                Arguments.of(unpooledByteBufAllocator(), 10,  8, null),                 // T10 passed
-                Arguments.of(unpooledByteBufAllocator(), 10, 10, Exception.class),      // T11 passed
-                Arguments.of(unpooledByteBufAllocator(), 10, 20, Exception.class)       // T12 passed
+                Arguments.of(unpooledByteBufAllocator(), 512,  -1, Exception.class),      // T6  passed
+                Arguments.of(unpooledByteBufAllocator(), 512,   0, Exception.class),      // T7  passed
+                Arguments.of(unpooledByteBufAllocator(), 512,   1, null),                 // T8  passed
+                Arguments.of(unpooledByteBufAllocator(), 512, 100, Exception.class),      // T9  passed
+                Arguments.of(unpooledByteBufAllocator(), 512, 128, null),                 // T10 passed
+                Arguments.of(unpooledByteBufAllocator(), 512, 512, null),                 // T11 passed
+                Arguments.of(unpooledByteBufAllocator(), 512, 600, Exception.class)       // T12 passed
 
         );
     }

@@ -96,6 +96,12 @@ public class Utils {
         buffer.writeBytes(BC_BB_CONTENT.getBytes());
         return buffer;
     }
+    public static ByteBuf lenFullByteBuf(int len) {
+        ByteBuf buffer = Unpooled.buffer(len);
+        String s = new String(new char[len]).replace("\0", "a");
+        buffer.writeBytes(s.getBytes());
+        return buffer;
+    }
     @SuppressWarnings("unused") public static ByteBuf invalidWriteIndexByteBuf() {
         ByteBuf buffer = spy(fullByteBuf());
         when(buffer.writerIndex()).thenReturn(BC_BB_CONTENT.length());
