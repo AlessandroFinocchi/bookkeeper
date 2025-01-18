@@ -329,4 +329,14 @@ public class WriteCache implements Closeable {
     public ByteBuf[] getCacheSegments() {
         return cacheSegments;
     }
+
+    @VisibleForTesting
+    public long getSegmentOffsetMask() {
+        return segmentOffsetMask;
+    }
+
+    @VisibleForTesting
+    public long getSegmentOffsetBits() {
+        return segmentOffsetBits;
+    }
 }

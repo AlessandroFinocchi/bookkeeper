@@ -42,7 +42,7 @@ public class WriteCacheConstructorTest {
                 Arguments.of(unpooledByteBufAllocator(), 10,  1, null),                 // T8  passed
                 Arguments.of(unpooledByteBufAllocator(), 10,  6, Exception.class),      // T9  passed
                 Arguments.of(unpooledByteBufAllocator(), 10,  8, null),                 // T10 passed
-                Arguments.of(unpooledByteBufAllocator(), 10, 10, Exception.class),       // T11 passed
+                Arguments.of(unpooledByteBufAllocator(), 10, 10, Exception.class),      // T11 passed
                 Arguments.of(unpooledByteBufAllocator(), 10, 20, Exception.class)       // T12 passed
 
         );
@@ -75,6 +75,10 @@ public class WriteCacheConstructorTest {
                     Assertions.assertEquals(wc.getCacheSegments()[i].capacity(),
                             i < expectedSegmentCount - 1 ? maxSegmentSize : maxCacheSize % maxSegmentSize);
                 }
+
+                // ====================================== Added after pitest ====================================== //
+                Assertions.assertEquals(wc.getSegmentOffsetMask(), maxSegmentSize - 1);
+                Assertions.assertEquals(wc.getSegmentOffsetBits(), 63 - Long.numberOfLeadingZeros(maxSegmentSize));
             }
             catch (Exception e) {
                 throw new RuntimeException(e);

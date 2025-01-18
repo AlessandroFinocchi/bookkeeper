@@ -136,11 +136,13 @@ public class BufferedChannelUtils {
 //            System.out.println(new String(bb.array(), 0, bb.limit()));
 
 
-            ByteBuf b1 = emptyByteBuf();
-            ByteBuf b2 = semiFullByteBuf();
-            ByteBuf b3 = fullByteBuf();
-            ByteBuf b4 = invalidReadIndexByteBuf();
-            System.out.println(Long.MIN_VALUE);//-9223372036854775808
+//            ByteBuf b1 = emptyByteBuf();
+//            ByteBuf b2 = semiFullByteBuf();
+//            ByteBuf b3 = fullByteBuf();
+//            ByteBuf b4 = invalidReadIndexByteBuf();
+//            System.out.println(Long.MIN_VALUE);//-9223372036854775808
+
+            ByteBuf x = Unpooled.directBuffer(0, 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
 
