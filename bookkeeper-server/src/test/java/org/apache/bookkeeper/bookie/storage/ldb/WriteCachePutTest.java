@@ -2,7 +2,6 @@ package org.apache.bookkeeper.bookie.storage.ldb;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import org.apache.bookkeeper.util.collections.ConcurrentLongLongPairHashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Timeout;
@@ -58,10 +57,10 @@ public class WriteCachePutTest {
                 Arguments.of(validOneSegWritten, 1, 3, fullByteBuf(),              true, null),   // P-J2 passed
 
                 // After pitest
-                Arguments.of(validOneSegmentUnwritten,   1, 1, lenFullByteBuf(1024),     false, null),  // P-P1 passed
-                Arguments.of(validOneSegWritten, 1, 1, lenFullByteBuf(128),       true, null),          // P-P1 passed
-//                Arguments.of(validHalfSegWritten, 1, 1, lenFullByteBuf(128),    true, null),          // P-P2 not passed
-                Arguments.of(validHalfSegWritten, 1, 1, lenFullByteBuf(128),     false, null)           // P-P3 passed
+                Arguments.of(validOneSegmentUnwritten, 1, 1, lenFullByteBuf(1024), false, null),  // P-P1 passed
+                Arguments.of(validOneSegWritten, 1, 1, lenFullByteBuf(128),         true, null),  // P-P2 passed
+//                Arguments.of(validHalfSegWritten, 1, 1, lenFullByteBuf(128),      true, null),  // P-P3 not passed
+                Arguments.of(validHalfSegWritten, 1, 1, lenFullByteBuf(128),       false, null)   // P-P4 passed
         );
     }
 
@@ -103,13 +102,10 @@ public class WriteCachePutTest {
                 Assertions.assertEquals(expectedReturn, actualReturn, "failed on return");
 
                 // ======================================== Check hash maps ========================================= //
-                ConcurrentLongLongPairHashMap.LongPair actualStoredPair = wc.getIndex().get(ledgerId, entryId);
-                ConcurrentLongLongPairHashMap.LongPair expectedStoredPair = wc.getIndex().get(ledgerId, entryId);
                 long actualStoredEntryId = wc.getLastEntryMap().get(ledgerId);
                 long expectedStoredEntryId = actualReturn && entryId > firstPutEntryId ? entryId : firstPutEntryId;
 
                 Assertions.assertEquals(expectedStoredEntryId, actualStoredEntryId, "failed on entry id");
-                Assertions.assertEquals(expectedStoredPair, actualStoredPair, "failed on stored pair");
             } catch (Exception e) { throw new RuntimeException(e); }
         }
     }
