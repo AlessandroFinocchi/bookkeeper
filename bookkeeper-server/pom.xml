@@ -669,13 +669,13 @@
             <configuration>
               <threads>4</threads>
               <targetClasses>
-<!--                <param>org.apache.bookkeeper.bookie.BufferedChannel</param>-->
+                <param>org.apache.bookkeeper.bookie.BufferedChannel</param>
                 <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCache</param>
               </targetClasses>
               <targetTests>
-<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelConstructorTest</param>-->
-<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>-->
-<!--                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>-->
+                <param>org.apache.bookkeeper.bookie.BufferedChannelConstructorTest</param>
+                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
+                <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
                 <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCacheConstructorTest</param>
                 <param>org.apache.bookkeeper.bookie.storage.ldb.WriteCachePutTest</param>
               </targetTests>
