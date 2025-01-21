@@ -2,6 +2,7 @@ package org.apache.bookkeeper.bookie.storage.ldb;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import org.apache.bookkeeper.util.collections.ConcurrentLongLongPairHashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Timeout;
@@ -106,6 +107,21 @@ public class WriteCachePutTest {
                 long expectedStoredEntryId = actualReturn && entryId > firstPutEntryId ? entryId : firstPutEntryId;
 
                 Assertions.assertEquals(expectedStoredEntryId, actualStoredEntryId, "failed on entry id");
+
+                // ===================================== Check written content ====================================== //
+                if(expectedReturn) {
+                    ConcurrentLongLongPairHashMap.LongPair pairs = wc.getIndex().get(ledgerId, entryId);
+                    long offset = pairs.first;
+                    int length = (int) pairs.second;
+                    int localOffset = (int) offset % s.maxSegmentSize;
+                    int segment = (int) offset / s.maxSegmentSize;
+                    ByteBuf actualWrittenEntry = unpooledByteBufAllocator().buffer(length, length);
+                    actualWrittenEntry.writeBytes(wc.getCacheSegments()[segment], localOffset, length);
+                    String actualWrittenString = actualWrittenEntry.toString(StandardCharsets.UTF_8);
+
+                    Assertions.assertEquals(expectedWrittenString, actualWrittenString, "failed on written entry");
+                }
+
             } catch (Exception e) { throw new RuntimeException(e); }
         }
     }
