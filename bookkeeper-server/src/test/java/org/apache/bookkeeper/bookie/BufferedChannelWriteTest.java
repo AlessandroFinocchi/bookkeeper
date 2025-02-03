@@ -36,32 +36,32 @@ public class BufferedChannelWriteTest {
 //                    Arguments.of(unpooledByteBufAllocator(), validFileChannel(),             100,  100, -1, fullByteBuf(), Exception.class)  // T17 -> W3 not passed
 
                     // Varying fc
-                    Arguments.of(unpooledByteBufAllocator(), readOnlyFileChannel(),  100, 100, 1,  fullByteBuf(), Exception.class),            // W4 passed
+                    Arguments.of(unpooledByteBufAllocator(), readOnlyFileChannel(),  100, 100, 1,  fullByteBuf(), Exception.class),        // W4 passed
 
                     // Varying writeCapacity
-//                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(),       0,      100, 1, fullByteBuf(), Exception.class),     // W5 timeout
+//                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(),       0,      100, 1, fullByteBuf(), Exception.class), // W5 timeout
 
                     // Varying unpersistedBytesBound
-//                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     0,                          fullByteBuf(), null),// W6  not passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length()-1,   fullByteBuf(), null),  // W7  passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length(),     fullByteBuf(), null),  // W8  passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length()+1,   fullByteBuf(), null),  // W9  passed
+//                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     0,                          fullByteBuf(), null), // W6  not passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length()-1,   fullByteBuf(), null),   // W7  passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length(),     fullByteBuf(), null),   // W8  passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100,     BC_BB_CONTENT.length()+1,   fullByteBuf(), null),   // W9  passed
 
                     // Varying src
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      emptyByteBuf(),                 null),              // W10 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      semiFullByteBuf(),              null),              // W11 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      fullByteBuf(),                  null),              // W12 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      invalidReadIndexByteBuf(),      Exception.class),   // W13 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      deallocatedByteBuf(),           Exception.class),   // W14 passed
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      null,                           Exception.class),   // W15 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      emptyByteBuf(),                 null),            // W10 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      semiFullByteBuf(),              null),            // W11 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      fullByteBuf(),                  null),            // W12 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      invalidReadIndexByteBuf(),      Exception.class), // W13 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      deallocatedByteBuf(),           Exception.class), // W14 passed
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), 100, 100, 1,      null,                           Exception.class), // W15 passed
 
                     // Added test after jacoco analysis
-                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()/2, 100, 0, fullByteBuf(), null)                // J-W1
-//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()/2+1, 100, 0, fullByteBuf(), null)       // J-W2
+                    Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()/2, 100, 0, fullByteBuf(), null)          // J-W1
+//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()/2+1, 100, 0, fullByteBuf(), null) // J-W2
 
 //                    // Added test after pitest analysis
-                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()-2, 1, 1, fullByteBuf(), null)                 // P-W1
-//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()-2, 1, 3, fullByteBuf(), null)           // P-W1
+                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_CONTENT.length()-2, 1, 1, fullByteBuf(), null)           // P-W1
+//                    ,Arguments.of(unpooledByteBufAllocator(),  validFileChannel(), BC_BB_STRING_TEST.length()-2, 1, 3, fullByteBuf(), null)     // P-W2
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
