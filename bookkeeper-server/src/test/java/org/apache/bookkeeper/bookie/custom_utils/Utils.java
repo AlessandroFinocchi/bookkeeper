@@ -120,38 +120,4 @@ public class Utils {
         buffer.release();
         return buffer;
     }
-
-    public static void main(String[] args){
-        try {
-            // WRITE IN FILE CHANNEL
-//            ByteBuf writeBuffer = unpooledByteBufAllocator().directBuffer(12);
-//            ByteBuf src = fullByteBuf();
-//            writeBuffer.writeBytes(src, 0, 12);
-//            ByteBuffer toWrite = writeBuffer.internalNioBuffer(0, 12);
-//            FileChannel f = readOnlyFileChannel();
-//            f.position(0);
-//            int numBytesWritten = f.write(toWrite);
-//            System.out.println(numBytesWritten);
-
-
-            // READ FROM FILE CHANNEL
-//            ByteBuffer bb = ByteBuffer.allocate(BC_BB_STRING_TEST.length());
-//            FileChannel f = readOnlyFileChannel();
-//            f.read(bb, 6);
-//            bb.flip();
-//            System.out.println(new String(bb.array(), 0, bb.limit()));
-
-
-//            ByteBuf b1 = emptyByteBuf();
-//            ByteBuf b2 = semiFullByteBuf();
-//            ByteBuf b3 = fullByteBuf();
-//            ByteBuf b4 = invalidReadIndexByteBuf();
-//            System.out.println(Long.MIN_VALUE);//-9223372036854775808
-
-            ByteBuf x = Unpooled.directBuffer(0, 0);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        }
-    }
 }
