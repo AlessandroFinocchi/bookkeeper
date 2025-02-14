@@ -3,6 +3,9 @@
 clean:
 	mvn clean
 
+it:
+	mvn verify -P isw2-integration-test
+
 jacoco:
 	mvn verify -P isw2-jacoco
 
