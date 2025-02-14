@@ -34,7 +34,7 @@ jobs:
       - name: Build and analyze bookkeeper project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: mvn verify -P isw2-ba-dua -Dmaven.test.failure.ignore=true
+        run: mvn verify -P isw2-ba-dua -Dmaven.test.failure.ignore=true -f bookkeeper-server/
       - name: Upload XML report
         uses: actions/upload-artifact@v4
         with:

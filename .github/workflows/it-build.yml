@@ -1,4 +1,4 @@
-name: Pitest-workflow
+name: Integration-Test-workflow
 on:
   push:
     branches:
@@ -27,10 +27,10 @@ jobs:
       - name: Build and analyze bookkeeper project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: mvn install -P isw2-pitest -f bookkeeper-server/
+        run: mvn install -P isw2-integration-test -f bookkeeper-server/
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
           name: PIT_Report
-          path: bookkeeper-server/target/pit-reports
+          path: bookkeeper-server/target/surefire-reports
           if-no-files-found: error
